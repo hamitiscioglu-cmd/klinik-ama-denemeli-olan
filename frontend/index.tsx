@@ -1,11 +1,42 @@
 import React, { useState, useEffect, useMemo, Dispatch, SetStateAction, ChangeEvent, FormEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { GoogleGenAI } from "@google/genai";
+
 const API_URL = process.env.REACT_APP_API_URL || 'https://klinik-ama-denemeli-olan.onrender.com/api';
 
-
 // --- AI SETUP ---
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Frontend'de artık API key kullanmıyoruz.
+// Backend'e istek atacağız:
+// --- AI via backend proxy ---
+async function generateWithGemini(prompt: string) {
+  const response = await fetch(`${API_URL}/gemini`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }]
+    }),
+  });
+
+  if (!response.ok) {
+    console.error("Gemini API error:", await response.text());
+    return null;
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+// Cevap metnini pratikçe alan yardımcı (opsiyonel ama kullanışlı)
+function extractTextFromGemini(resp: any) {
+  try {
+    const parts = resp?.candidates?.[0]?.content?.parts;
+    if (Array.isArray(parts)) {
+      return parts.map((p: any) => p?.text).filter(Boolean).join("\n");
+    }
+  } catch {}
+  return "";
+}
+
+
 
 // --- DATA & TYPES ---
 
