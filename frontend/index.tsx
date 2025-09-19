@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, Dispatch, SetStateAction, ChangeEvent, FormEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 import { GoogleGenAI } from "@google/genai";
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://klinik-ama-denemeli-olan.onrender.com/api';
+
 
 // --- AI SETUP ---
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
