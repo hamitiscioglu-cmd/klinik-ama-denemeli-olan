@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, Dispatch, SetStateAction, ChangeEvent, FormEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://klinik-ama-denemeli-olan.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 // --- AI SETUP ---
 // Frontend'de artık API key kullanmıyoruz.
